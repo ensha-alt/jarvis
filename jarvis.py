@@ -3,6 +3,33 @@ import webbrowser
 import pyttsx3
 import requests 
 
+
+def get_news():
+    api_key = "621827580ed64e8cb32a9236d6c9f40f" 
+    url = f"https://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        articles = response.json()["articles"]
+        speak("Here are the top news headlines:")
+        for i, article in enumerate(articles[:5]):  # Reads top 5 headlines
+            speak(f"{i+1}. {article['title']}")
+    else:
+        speak("Sorry, I couldn't fetch the news.")
+
+
+def get_weather(city):
+    api_key = "ae8d0e1cf40267b404623d84a190684b" 
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        weather = data["weather"][0]["description"]
+        temp = data["main"]["temp"]
+        speak(f"The weather in {city} is {weather} with {temp}°C.")
+    else:
+        speak("Sorry, I could not retrieve the weather information.")
+
+
 try:
     import musicLibrary  # Ensure this module exists
 except ImportError:
@@ -31,6 +58,14 @@ def processCommand(command):
     elif "open youtube" in command:
         speak("Opening YouTube")
         webbrowser.open("https://youtube.com")
+    elif "weather" in command:
+        speak("Which city should I check the weather for?")
+        city = take_command()
+        get_weather(city)
+    elif "news" in command:
+        get_news()
+
+
     elif command.startswith("play") and musicLibrary:
         song = command.split(" ", 1)[1]  # Get song name after "play"
         if song in musicLibrary.music:
