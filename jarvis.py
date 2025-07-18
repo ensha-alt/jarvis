@@ -2,8 +2,9 @@ import speech_recognition as sr
 import webbrowser
 import pyttsx3
 import requests 
+from textblob import TextBlob
 
-
+#news 
 def get_news():
     api_key = "621827580ed64e8cb32a9236d6c9f40f" 
     url = f"https://newsapi.org/v2/top-headlines?country=in&apiKey={api_key}"
@@ -16,7 +17,7 @@ def get_news():
     else:
         speak("Sorry, I couldn't fetch the news.")
 
-
+#weather
 def get_weather(city):
     api_key = "ae8d0e1cf40267b404623d84a190684b" 
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
@@ -28,6 +29,22 @@ def get_weather(city):
         speak(f"The weather in {city} is {weather} with {temp}°C.")
     else:
         speak("Sorry, I could not retrieve the weather information.")
+
+
+#nlp detector for betetr conversation
+def get_intent(command):
+    command = command.lower()
+    if "weather" in command or "temperature" in command:
+        return "weather"
+    elif "news" in command or "headlines" in command:
+        return "news"
+    elif "time" in command or "clock" in command:
+        return "time"
+    elif "date" in command or "day" in command:
+        return "date"
+    else:
+        return "unknown"
+
 
 
 try:
@@ -48,6 +65,10 @@ def processCommand(command):
     """Process recognized commands"""
     command = command.lower()
     print(f"Command received: {command}")
+
+
+    
+    
 
     if "open google" in command:
         speak("Opening Google")
