@@ -31,21 +31,6 @@ def get_weather(city):
         speak("Sorry, I could not retrieve the weather information.")
 
 
-#nlp detector for betetr conversation
-def get_intent(command):
-    command = command.lower()
-    if "weather" in command or "temperature" in command:
-        return "weather"
-    elif "news" in command or "headlines" in command:
-        return "news"
-    elif "time" in command or "clock" in command:
-        return "time"
-    elif "date" in command or "day" in command:
-        return "date"
-    else:
-        return "unknown"
-
-
 
 try:
     import musicLibrary  # Ensure this module exists
